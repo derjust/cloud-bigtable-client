@@ -605,7 +605,7 @@ public class CloudBigtableIO {
     private transient Connection conn;
     private transient BufferedMutator mutator;
 
-    private CloudBigtableSingleTableWriteFn(CloudBigtableTableConfiguration config) {
+    public CloudBigtableSingleTableWriteFn(CloudBigtableTableConfiguration config) {
       this.config = config;
     }
 
@@ -636,16 +636,12 @@ public class CloudBigtableIO {
 
     protected void logExceptions(final Context context,
         RetriesExhaustedWithDetailsException exception) {
-      List<Throwable> causes = exception.getCauses();
-      String failEventId = UUID.randomUUID().toString();
-      String message =
-          String.format("For context %s: eventId: %s occured during bulk writing.", context,
-            failEventId);
-      LOG.warn(message, exception);
-      for (int i = 0; i < causes.size(); i++) {
-        LOG.warn(String.format("context %s: eventId %s excepition %d", context, failEventId, i),
-          causes.get(i));
-      }
+      // RetriesExhaustedWithDetailsException has its pre-JDK1.7 semantics
+      // of bundled Exceptions via RetriesExhaustedWithDetailsException#getCauses as
+      // opposed to Throwable#getSuppressed
+      // Those get logged via RetriesExhaustedWithDetailsException#getExhaustiveDescription
+      LOG.warn("For context {}: exception occured during bulk writing: {}",
+        context, exception.getExhaustiveDescription());
     }
 
     /**
