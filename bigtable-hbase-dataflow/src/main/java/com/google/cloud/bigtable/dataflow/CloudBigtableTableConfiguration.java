@@ -94,4 +94,18 @@ public class CloudBigtableTableConfiguration extends CloudBigtableConfiguration 
   public String getTableId() {
     return tableId;
   }
+
+  /**
+   * Creates a builder based on this configuration for further adoption
+   * @return An initialized builder for this configuration
+   */
+  @Override
+  public Builder<?> toBuilder() {
+    Builder<?> builder = new Builder<Builder<?>>();
+
+    toBuilder(builder);
+    builder.tableId = this.tableId;
+
+    return builder;
+  }
 }

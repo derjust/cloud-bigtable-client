@@ -169,4 +169,26 @@ public class CloudBigtableConfiguration implements Serializable {
     }
     return config;
   }
+
+  /**
+   * Creates a builder based on this configuration for further adoption
+   * @return An initialized builder for this configuration
+   */
+  public Builder<?> toBuilder() {
+
+	  Builder<?> builder = new Builder<Builder<?>>();
+
+	  return toBuilder(builder);
+  }
+
+  protected Builder<?> toBuilder(Builder<?> builder) {
+    Map<String, String> existingConfiguration = new HashMap<>(this.configuration);
+
+    builder.projectId = existingConfiguration.remove(BigtableOptionsFactory.PROJECT_ID_KEY);
+    builder.zoneId = existingConfiguration.remove(BigtableOptionsFactory.ZONE_KEY);
+    builder.clusterId = existingConfiguration.remove(BigtableOptionsFactory.CLUSTER_KEY);
+    builder.additionalConfiguration = existingConfiguration;
+
+    return builder;
+  }
 }
