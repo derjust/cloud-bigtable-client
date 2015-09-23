@@ -43,14 +43,46 @@ limitations under the License.
         <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-client</artifactId>
+            <exclusions>
+            	<exclusion>
+            		<artifactId>log4j</artifactId>
+            		<groupId>log4j</groupId>
+            	</exclusion>
+            	<exclusion>
+            		<artifactId>slf4j-log4j12</artifactId>
+            		<groupId>org.slf4j</groupId>
+            	</exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-common</artifactId>
+            <exclusions>
+            	<exclusion>
+            		<artifactId>log4j</artifactId>
+            		<groupId>log4j</groupId>
+            	</exclusion>
+            	<exclusion>
+            		<artifactId>slf4j-log4j12</artifactId>
+            		<groupId>org.slf4j</groupId>
+            	</exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-common</artifactId>
+            <exclusions>
+            	<exclusion>
+            		<artifactId>log4j</artifactId>
+            		<groupId>log4j</groupId>
+            	</exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+        	<groupId>org.slf4j</groupId>
+        	<artifactId>log4j-over-slf4j</artifactId>
+        	<version>1.7.5</version>
+        	<scope>runtime</scope>
         </dependency>
     </dependencies>
     <build>
@@ -94,11 +126,11 @@ limitations under the License.
 
                                 Using shadedArtifactAttached=true causes some tricky issues.  If =true is on,
                                 then the main artifact isn't usable, because of the incompatibility issues in the artifacts found
-                                in the relocations section.  If HBase updates its dependencies to compatible versions, then 
+                                in the relocations section.  If HBase updates its dependencies to compatible versions, then
                                 this project will not need to relocate and include those dependencies in a shaded jar.
 
-                                As an example, the start up of hbase requires guava, and using a newer version of guava causes 
-                                startup issues.  If an older version of guava is in the classpath, then HBase classes will load 
+                                As an example, the start up of hbase requires guava, and using a newer version of guava causes
+                                startup issues.  If an older version of guava is in the classpath, then HBase classes will load
                                 fine, but CBT will have runtime issues.
 
                                 Additionally, if shadedArtifactAttached=true there are even ssues using the shaded classifier.
